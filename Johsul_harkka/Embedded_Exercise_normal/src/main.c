@@ -76,19 +76,16 @@
 
 
 /***************************************************************************************
-Name:
-Student number:
+Name: Roope Mantere	
+Student number: 50049244
 
-Name:
-Student number:
-
-Name:
-Student number:
+Name: Sami Siuko	
+Student number: 150350833
 
 Tick boxes that you have coded
 
 Led-matrix driver		Game		    Assembler
-	[]					[]					[]
+	[x]					[]					[]
 
 Brief description:
 
@@ -141,12 +138,20 @@ void TickHandler(void *CallBackRef){
 
 
 	//****Write code here ****
+	/*This function is the timer interrupt handler for the LED matrix screen. The refresh rate is 800 Hz.
+	- This makes it look like there are many LEDs on at the same time, although they are ON individually and just updated very fast.
+	- To update the matrix, it should be first checked that the channel is not greater than 7 (over the screen). If it is, zero it.
+	- Next, all channels should be closed with the default case of open_line().
+	- After this, the current channel should be run and opened, and the channel should be incremented.
+	*/
+	// Make the timer interrupt handler for the LED matrix screen. The refresh rate is 800 Hz.
 
-
-
-
-
-
+	//use default case of open_line to close all channels.
+	open_line(8);
+	for(int i = 0; i < 8; i++){
+		run(channels[i]);
+		open_line(channels[i]);
+	}
 
 	//****END OF OWN CODE*****************
 
