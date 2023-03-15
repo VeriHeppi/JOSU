@@ -45,12 +45,10 @@ void setup(){
 void SetPixel(uint8_t x,uint8_t y, uint8_t r, uint8_t g, uint8_t b){
 
 	//Hint: you can invert Y-axis quite easily with 7-y
-	dots[x][y][0]=b;
+	dots[x][7-y][0]=b;
 	//Write rest of two lines of code required to make this function work properly (green and red colors to array).
-	dots[x][y][1]=g;
-	dots[x][y][2]=r;
-
-
+	dots[x][7-y][1]=g;
+	dots[x][7-y][2]=r;
 }
 
 
@@ -62,18 +60,22 @@ void run(uint8_t x){
 	latch();
 	for(int i = 0; i < 8; i++){
 		for (int c = 0; c < 3; c++){
+			volatile uint8_t dots_value = dots[x][i][c];
 			for(int b = 0; b < 8; b++){
-				if(dots[x][i][c] & (1 << b)){
-					control |= 0b01000;
+
+				if(dots_value & 0b10000000){
+					control |= 0b10000;
 				}
 				else{
-					control &= 0b10110;
+					control &= 0b01111;
 				}
-				latch();
+				control |= 0b01000;
+				dots_value <<=1;
+				control &= 0b10111;
 			}
 		}
 	}
-	
+	latch();
 }
 
 //Latch signal. See colorsshield.pdf or DM163.pdf in project folder on how latching works
@@ -115,7 +117,6 @@ void open_line(uint8_t x){
 			channel = 0;
 			break;
 	}
-
 }
 
 

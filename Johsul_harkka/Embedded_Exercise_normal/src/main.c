@@ -71,7 +71,7 @@
 
 //Comment this if you want to disable all interrupts
 #define enable_interrupts
-
+int line = 0;
 
 
 
@@ -109,8 +109,6 @@ int main()
 	    //setup screen
 	    setup();
 
-
-
 	    Xil_ExceptionEnable();
 
 
@@ -146,14 +144,27 @@ void TickHandler(void *CallBackRef){
 	*/
 	// Make the timer interrupt handler for the LED matrix screen. The refresh rate is 800 Hz.
 
-	//use default case of open_line to close all channels.
-	open_line(8);
-	for(int i = 0; i < 8; i++){
-		run(channels[i]);
-		open_line(channels[i]);
+    SetPixel(1,0,255,0,0);
+    SetPixel(3,0,255,0,0);
+    SetPixel(2,1,255,0,0);
+    SetPixel(2,2,255,0,0);
+    SetPixel(2,3,255,0,0);
+    SetPixel(2,4,0,255,0);
+	if(line <= 7)
+	{
+		run(line);
+		open_line(line);
+		line++;
+	}
+	else{
+		open_line(8);
+		line = 0;
 	}
 
+	//use default case of open_line to close all channels.
 	//****END OF OWN CODE*****************
+
+
 
 	//*********clear timer interrupt status. DO NOT REMOVE********
 	StatusEvent = XTtcPs_GetInterruptStatus((XTtcPs *)CallBackRef);
